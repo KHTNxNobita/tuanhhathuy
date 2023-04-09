@@ -7,6 +7,7 @@ package frm;
 
 import Hasaki.Main;
 import static Hasaki.Main.frmTC;
+import database.clsConnectDB;
 import java.awt.Color;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,17 +19,29 @@ import javax.swing.table.DefaultTableModel;
  */
 public class HoaDonJPanel extends javax.swing.JPanel {
 
+    private clsConnectDB connection;
+
+    public clsConnectDB getConnection() {
+        if (this.connection == null) {
+            this.connection = new clsConnectDB();
+        }
+
+        return this.connection;
+    }
+
     /**
      * Creates new form HoaDonJPanel
      */
     public HoaDonJPanel() {
         initComponents();
+        this.connection = new clsConnectDB();
         LayDuLieuHoaDon();
     }
-public void LayDuLieuHoaDon (){
-    String cautruyvan = "";
+
+    public void LayDuLieuHoaDon() {
+        String cautruyvan = "";
         cautruyvan = "select * from HOADON ";
-        ResultSet rs = Main.connection.ExcuteQueryGetTable(cautruyvan);
+        ResultSet rs = this.getConnection().ExcuteQueryGetTable(cautruyvan);
         Object[] obj = new Object[]{"STT", "Mã hóa đơn", "Mã khách hàng", "Mã nhân viên", "Trị giá", "Ngày lập", "Phương thức thanh toán"};
         DefaultTableModel tableModel = new DefaultTableModel(obj, 0);
         tblHoaDon.setModel(tableModel);
@@ -44,19 +57,19 @@ public void LayDuLieuHoaDon (){
                 item[4] = rs.getString("TRIGIA");
                 item[5] = rs.getString("NGAYLAP");
                 item[6] = rs.getString("PTTT");
-                
-            
+
                 tableModel.addRow(item);
             }
         } catch (SQLException ex) {
             System.out.println(ex.toString());
         }
- }
-public void LayDuLieuChiTietHoaDon (String MaDH){
-   
-    String cautruyvan = "";
-        cautruyvan = "select * from CTHOADON where MADH= '"+MaDH+"'";
-        ResultSet rs = Main.connection.ExcuteQueryGetTable(cautruyvan);
+    }
+
+    public void LayDuLieuChiTietHoaDon(String MaDH) {
+
+        String cautruyvan = "";
+        cautruyvan = "select * from CTHOADON where MADH= '" + MaDH + "'";
+        ResultSet rs = this.getConnection().ExcuteQueryGetTable(cautruyvan);
         Object[] obj = new Object[]{"STT", "Mã hóa đơn", "Mã mặt hàng", "Số lượng", "Giá bán", "Thành tiền"};
         DefaultTableModel tableModel = new DefaultTableModel(obj, 0);
         tblCTHD.setModel(tableModel);
@@ -71,25 +84,25 @@ public void LayDuLieuChiTietHoaDon (String MaDH){
                 item[3] = rs.getInt("SL");
                 item[4] = rs.getFloat("DGBAN");
                 item[5] = rs.getFloat("THANHTIEN");
-                
-            
+
                 tableModel.addRow(item);
             }
         } catch (SQLException ex) {
             System.out.println(ex.toString());
         }
- } 
- public boolean KiemTraNhapHoaDon(int ts) {
+    }
+
+    public boolean KiemTraNhapHoaDon(int ts) {
         boolean kiemtra = false;
-          String MaDH,MaKH,MaNV,TriGia,NgayLap,PTTT;
-        MaDH=txtMaDH.getText();
-        MaKH=txtMaKH.getText();
-        MaNV=txtMaNV.getText();
-        TriGia=txtTriGia.getText();
-        NgayLap=txtNgayLap.getText();
-        PTTT=txtPTTT.getText();
-        String  ThongBao = "";
-        
+        String MaDH, MaKH, MaNV, TriGia, NgayLap, PTTT;
+        MaDH = txtMaDH.getText();
+        MaKH = txtMaKH.getText();
+        MaNV = txtMaNV.getText();
+        TriGia = txtTriGia.getText();
+        NgayLap = txtNgayLap.getText();
+        PTTT = txtPTTT.getText();
+        String ThongBao = "";
+
         if (MaDH.equals("") && ts == 1) {
             ThongBao += "Bạn Chưa nhập mã đơn hàng\n";
             lblMaDH_HD.setForeground(Color.red);
@@ -97,12 +110,12 @@ public void LayDuLieuChiTietHoaDon (String MaDH){
         if (MaKH.equals("")) {
             ThongBao += "Bạn chưa nhập mã khách hàng\n";
             lblMaKH.setForeground(Color.red);
-            
+
         }
-         if (MaNV.equals("")) {
+        if (MaNV.equals("")) {
             ThongBao += "Bạn chưa nhập mã nhân viên\n";
             lblMaNV.setForeground(Color.red);
-            
+
         }
         if (TriGia.equals("")) {
             ThongBao += "Bạn chưa nhập trị giá\n";
@@ -115,9 +128,9 @@ public void LayDuLieuChiTietHoaDon (String MaDH){
         if (PTTT.equals("")) {
             lblPTTT.setForeground(Color.red);
             ThongBao += "Bạn chưa nhập phương thức thanh toán \n";
-           
+
         }
-       
+
         if (ThongBao.equals("")) {
             kiemtra = true;
             lblMaKH.setForeground(Color.black);
@@ -126,35 +139,34 @@ public void LayDuLieuChiTietHoaDon (String MaDH){
             lblMaNV.setForeground(Color.black);
             lblNgayLap.setForeground(Color.black);
             lblPTTT.setForeground(Color.black);
-            
+
         } else {
             kiemtra = false;
             frmTC.ThongBao(ThongBao, "LỖI NHẬP LIỆU", 2);
         }
         return kiemtra;
     }
-public boolean KiemTraNhapChiTietHoaDon(int ts) {
+
+    public boolean KiemTraNhapChiTietHoaDon(int ts) {
         boolean kiemtra = false;
-          String MaMH,SL,DGBan,TT;
-       
-        MaMH=txtMaMH.getText();
-        SL=txtSL.getText();
-        DGBan=txtGiaBan.getText();
-        TT=txtThanhTien.getText();
-        
-        String  ThongBao = "";
-        
-        
-        
+        String MaMH, SL, DGBan, TT;
+
+        MaMH = txtMaMH.getText();
+        SL = txtSL.getText();
+        DGBan = txtGiaBan.getText();
+        TT = txtThanhTien.getText();
+
+        String ThongBao = "";
+
         if (MaMH.equals("")) {
             ThongBao += "Bạn chưa nhập mã mặt hàng\n";
             lblMaMH.setForeground(Color.red);
-            
+
         }
-         if (SL.equals("")) {
+        if (SL.equals("")) {
             ThongBao += "Bạn chưa nhập số lượng\n";
             lblSL.setForeground(Color.red);
-            
+
         }
         if (DGBan.equals("")) {
             ThongBao += "Bạn chưa nhập trị giá\n";
@@ -164,8 +176,7 @@ public boolean KiemTraNhapChiTietHoaDon(int ts) {
             lblThanhTien.setForeground(Color.red);
             ThongBao += "Bạn chưa nhập thành tiền\n";
         }
-        
-       
+
         if (ThongBao.equals("")) {
             kiemtra = true;
             lblMaMH.setForeground(Color.black);
@@ -173,8 +184,7 @@ public boolean KiemTraNhapChiTietHoaDon(int ts) {
             lblSL.setForeground(Color.black);
             lblGiaBan.setForeground(Color.black);
             lblThanhTien.setForeground(Color.black);
-            
-            
+
         } else {
             kiemtra = false;
             frmTC.ThongBao(ThongBao, "LỖI NHẬP LIỆU", 2);
@@ -188,7 +198,7 @@ public boolean KiemTraNhapChiTietHoaDon(int ts) {
      * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
@@ -609,110 +619,106 @@ public boolean KiemTraNhapChiTietHoaDon(int ts) {
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
-    }// </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>                        
 
-    private void tblHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonMouseClicked
+    private void tblHoaDonMouseClicked(java.awt.event.MouseEvent evt) {                                       
         // TODO add your handling code here:
-         int viTriDongVuaBam = tblHoaDon.getSelectedRow();
+        int viTriDongVuaBam = tblHoaDon.getSelectedRow();
         txtMaDH.setText(tblHoaDon.getValueAt(viTriDongVuaBam, 1).toString());
         txtMaKH.setText(tblHoaDon.getValueAt(viTriDongVuaBam, 2).toString());
         txtMaNV.setText(tblHoaDon.getValueAt(viTriDongVuaBam, 3).toString());
         txtTriGia.setText(tblHoaDon.getValueAt(viTriDongVuaBam, 4).toString());
         txtNgayLap.setText(tblHoaDon.getValueAt(viTriDongVuaBam, 5).toString());
         txtPTTT.setText(tblHoaDon.getValueAt(viTriDongVuaBam, 6).toString());
-        
-       
-        LayDuLieuChiTietHoaDon(txtMaDH.getText());
-        if(tblCTHD.getRowCount()>0)
-        {
-             txtMaDH_CTHD.setText(tblCTHD.getValueAt(0, 1).toString());
-        txtMaMH.setText(tblCTHD.getValueAt(0, 2).toString());
-        txtSL.setText(tblCTHD.getValueAt(0, 3).toString());
-        txtGiaBan.setText(tblCTHD.getValueAt(0, 4).toString());
-        txtThanhTien.setText(tblCTHD.getValueAt(0, 5).toString());
-        }
-        else 
-        {
-             txtMaDH_CTHD.setText(txtMaDH.getText());
-        }
-    }//GEN-LAST:event_tblHoaDonMouseClicked
 
-    private void tblCTHDMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCTHDMouseClicked
+        LayDuLieuChiTietHoaDon(txtMaDH.getText());
+        if (tblCTHD.getRowCount() > 0) {
+            txtMaDH_CTHD.setText(tblCTHD.getValueAt(0, 1).toString());
+            txtMaMH.setText(tblCTHD.getValueAt(0, 2).toString());
+            txtSL.setText(tblCTHD.getValueAt(0, 3).toString());
+            txtGiaBan.setText(tblCTHD.getValueAt(0, 4).toString());
+            txtThanhTien.setText(tblCTHD.getValueAt(0, 5).toString());
+        } else {
+            txtMaDH_CTHD.setText(txtMaDH.getText());
+        }
+    }                                      
+
+    private void tblCTHDMouseClicked(java.awt.event.MouseEvent evt) {                                     
         // TODO add your handling code here:
-         int viTriDongVuaBam = tblCTHD.getSelectedRow();
+        int viTriDongVuaBam = tblCTHD.getSelectedRow();
         txtMaDH_CTHD.setText(tblCTHD.getValueAt(viTriDongVuaBam, 1).toString());
         txtMaMH.setText(tblCTHD.getValueAt(viTriDongVuaBam, 2).toString());
         txtSL.setText(tblCTHD.getValueAt(viTriDongVuaBam, 3).toString());
         txtGiaBan.setText(tblCTHD.getValueAt(viTriDongVuaBam, 4).toString());
         txtThanhTien.setText(tblCTHD.getValueAt(viTriDongVuaBam, 5).toString());
         LayDuLieuChiTietHoaDon(txtMaDH.getText());
-    }//GEN-LAST:event_tblCTHDMouseClicked
+    }                                    
 
-    private void btnThemHDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemHDActionPerformed
+    private void btnThemHDActionPerformed(java.awt.event.ActionEvent evt) {                                          
         // TODO add your handling code here:
-        String MaDH,MaKH,MaNV,TriGia,NgayLap,PTTT;
-        MaDH=txtMaDH.getText();
-        MaNV=txtMaNV.getText();
-        MaKH=txtMaKH.getText();
-        TriGia=txtTriGia.getText();
-        NgayLap=txtNgayLap.getText();
-        PTTT=txtPTTT.getText();
-        
+        String MaDH, MaKH, MaNV, TriGia, NgayLap, PTTT;
+        MaDH = txtMaDH.getText();
+        MaNV = txtMaNV.getText();
+        MaKH = txtMaKH.getText();
+        TriGia = txtTriGia.getText();
+        NgayLap = txtNgayLap.getText();
+        PTTT = txtPTTT.getText();
+
         String cautruyvan = "INSERT into HOADON(MADH,MAKH,MANV,TRIGIA,NGAYLAP,PTTT) Values('" + MaDH + "','" + MaKH + "','" + MaNV + "','" + TriGia + "',Convert(datetime,'" + NgayLap + "'),N'" + PTTT + "')";
-        
+
         boolean kiemtra = KiemTraNhapHoaDon(0);
         if (kiemtra) {
-            Main.connection.ExcuteQueryUpdateDB(cautruyvan);
+            this.getConnection().ExcuteQueryUpdateDB(cautruyvan);
             Main.frmTC.infoBox("Thêm Thành Công !!!", "Thông báo");
             System.out.println("Đã Thêm Thành Công");
             System.out.println(cautruyvan);
         } else {
             System.out.println("Thất Bại");
         }
-         LayDuLieuHoaDon();
-    }//GEN-LAST:event_btnThemHDActionPerformed
+        LayDuLieuHoaDon();
+    }                                         
 
-    private void btnSuaHDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaHDActionPerformed
+    private void btnSuaHDActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
-         String MaDH,MaKH,MaNV,TriGia,NgayLap,PTTT;
-        MaDH=txtMaDH.getText();
-        MaKH=txtMaKH.getText();
-         MaNV=txtMaNV.getText();
-        TriGia=txtTriGia.getText();
-        NgayLap=txtNgayLap.getText();
-        PTTT=txtPTTT.getText();
-         String cautruyvan = "Update HOADON SET MAKH='" + MaKH + "', MANV='" + MaNV + "',TRIGIA='" + TriGia + "',NGAYLAP=Convert(datetime,'" + NgayLap + "'),PTTT=N'" + PTTT + "'WHERE MADH='"+MaDH+"'";
-        
+        String MaDH, MaKH, MaNV, TriGia, NgayLap, PTTT;
+        MaDH = txtMaDH.getText();
+        MaKH = txtMaKH.getText();
+        MaNV = txtMaNV.getText();
+        TriGia = txtTriGia.getText();
+        NgayLap = txtNgayLap.getText();
+        PTTT = txtPTTT.getText();
+        String cautruyvan = "Update HOADON SET MAKH='" + MaKH + "', MANV='" + MaNV + "',TRIGIA='" + TriGia + "',NGAYLAP=Convert(datetime,'" + NgayLap + "'),PTTT=N'" + PTTT + "'WHERE MADH='" + MaDH + "'";
+
         boolean kiemtra = KiemTraNhapHoaDon(0);
         if (kiemtra) {
-            Main.connection.ExcuteQueryUpdateDB(cautruyvan);
+            this.getConnection().ExcuteQueryUpdateDB(cautruyvan);
             Main.frmTC.infoBox(" Sửa Thành Công !!!", "Thông báo");
             System.out.println("Đã sửa Thành Công");
             System.out.println(cautruyvan);
         } else {
             System.out.println("Thất Bại");
         }
-         LayDuLieuHoaDon();
-    }//GEN-LAST:event_btnSuaHDActionPerformed
+        LayDuLieuHoaDon();
+    }                                        
 
-    private void btnXoaHDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaHDActionPerformed
+    private void btnXoaHDActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
-        String MaDH=txtMaDH.getText();
-         String cautruyvan = "delete HOADON where MADH='" + MaDH+"';";
-         Main.frmTC.infoBox("Lỗi Xóa hóa đơn  !!!", "Thông báo");
+        String MaDH = txtMaDH.getText();
+        String cautruyvan = "delete HOADON where MADH='" + MaDH + "';";
+        Main.frmTC.infoBox("Lỗi Xóa hóa đơn  !!!", "Thông báo");
         boolean kiemtra = KiemTraNhapHoaDon(0);
         if (kiemtra) {
-            Main.connection.ExcuteQueryUpdateDB(cautruyvan);
+            this.getConnection().ExcuteQueryUpdateDB(cautruyvan);
             Main.frmTC.infoBox("Xóa Thành Công !!!", "Thông báo");
             System.out.println("Đã xóa Thành Công");
             System.out.println(cautruyvan);
         } else {
             System.out.println("Thất Bại");
         }
-         LayDuLieuHoaDon();
-    }//GEN-LAST:event_btnXoaHDActionPerformed
+        LayDuLieuHoaDon();
+    }                                        
 
-    private void btnResetHDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetHDActionPerformed
+    private void btnResetHDActionPerformed(java.awt.event.ActionEvent evt) {                                           
         // TODO add your handling code here:
         txtMaDH.setText("");
         txtMaKH.setText("");
@@ -721,141 +727,136 @@ public boolean KiemTraNhapChiTietHoaDon(int ts) {
         txtNgayLap.setText("");
         txtPTTT.setText("");
         LayDuLieuHoaDon();
-    }//GEN-LAST:event_btnResetHDActionPerformed
+    }                                          
 
-    private void btnTimHDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimHDActionPerformed
+    private void btnTimHDActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
-        if(RadMaKH.isSelected())
-        {
-             String cautruyvan="Select * from HOADON where MAKH='"+txtTimHD.getText()+"'" ;
-              ResultSet rs = Main.connection.ExcuteQueryGetTable(cautruyvan);
-        Object[] obj = new Object[]{"STT", "Mã hóa đơn", "Mã khách hàng", "Mã nhân viên", "Trị giá", "Ngày lập", "Phương thức thanh toán"};
-        DefaultTableModel tableModel = new DefaultTableModel(obj, 0);
-        tblHoaDon.setModel(tableModel);
-        int c = 0;
-        try {
-            while (rs.next()) {
-                Object[] item = new Object[7];
-                c++;
-                item[0] = c;
-                item[1] = rs.getString("MADH");
-                item[2] = rs.getString("MAKH");
-                item[3] = rs.getString("MANV");
-                item[4] = rs.getString("TRIGIA");
-                item[5] = rs.getString("NGAYLAP");
-                item[6] = rs.getString("PTTT");
-                
-            
-                tableModel.addRow(item);
-            }
-        } catch (SQLException ex) {
-            System.out.println(ex.toString());
-        }
-       
-               
-        }else if(RadMaNV.isSelected()) { 
-              String cautruyvan="Select * from HOADON where MANV='"+txtTimHD.getText()+"'" ;
-              ResultSet rs = Main.connection.ExcuteQueryGetTable(cautruyvan);
-        Object[] obj = new Object[]{"STT", "Mã hóa đơn", "Mã khách hàng", "Mã nhân viên", "Trị giá", "Ngày lập", "Phương thức thanh toán"};
-        DefaultTableModel tableModel = new DefaultTableModel(obj, 0);
-        tblHoaDon.setModel(tableModel);
-        int c = 0;
-        try {
-            while (rs.next()) {
-                Object[] item = new Object[7];
-                c++;
-                item[0] = c;
-                item[1] = rs.getString("MADH");
-                item[2] = rs.getString("MAKH");
-                item[3] = rs.getString("MANV");
-                item[4] = rs.getString("TRIGIA");
-                item[5] = rs.getString("NGAYLAP");
-                item[6] = rs.getString("PTTT");
-                
-            
-                tableModel.addRow(item);
-            }
-        } catch (SQLException ex) {
-            System.out.println(ex.toString());
-        }
+        if (RadMaKH.isSelected()) {
+            String cautruyvan = "Select * from HOADON where MAKH='" + txtTimHD.getText() + "'";
+            ResultSet rs = this.getConnection().ExcuteQueryGetTable(cautruyvan);
+            Object[] obj = new Object[]{"STT", "Mã hóa đơn", "Mã khách hàng", "Mã nhân viên", "Trị giá", "Ngày lập", "Phương thức thanh toán"};
+            DefaultTableModel tableModel = new DefaultTableModel(obj, 0);
+            tblHoaDon.setModel(tableModel);
+            int c = 0;
+            try {
+                while (rs.next()) {
+                    Object[] item = new Object[7];
+                    c++;
+                    item[0] = c;
+                    item[1] = rs.getString("MADH");
+                    item[2] = rs.getString("MAKH");
+                    item[3] = rs.getString("MANV");
+                    item[4] = rs.getString("TRIGIA");
+                    item[5] = rs.getString("NGAYLAP");
+                    item[6] = rs.getString("PTTT");
 
-                    
-         }
-    }//GEN-LAST:event_btnTimHDActionPerformed
+                    tableModel.addRow(item);
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.toString());
+            }
 
-    private void btnThemCTHDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemCTHDActionPerformed
+        } else if (RadMaNV.isSelected()) {
+            String cautruyvan = "Select * from HOADON where MANV='" + txtTimHD.getText() + "'";
+            ResultSet rs = this.getConnection().ExcuteQueryGetTable(cautruyvan);
+            Object[] obj = new Object[]{"STT", "Mã hóa đơn", "Mã khách hàng", "Mã nhân viên", "Trị giá", "Ngày lập", "Phương thức thanh toán"};
+            DefaultTableModel tableModel = new DefaultTableModel(obj, 0);
+            tblHoaDon.setModel(tableModel);
+            int c = 0;
+            try {
+                while (rs.next()) {
+                    Object[] item = new Object[7];
+                    c++;
+                    item[0] = c;
+                    item[1] = rs.getString("MADH");
+                    item[2] = rs.getString("MAKH");
+                    item[3] = rs.getString("MANV");
+                    item[4] = rs.getString("TRIGIA");
+                    item[5] = rs.getString("NGAYLAP");
+                    item[6] = rs.getString("PTTT");
+
+                    tableModel.addRow(item);
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.toString());
+            }
+
+        }
+    }                                        
+
+    private void btnThemCTHDActionPerformed(java.awt.event.ActionEvent evt) {                                            
         // TODO add your handling code here:
-         String MaDH ,MaMH,SL,DGBan,TT;
-       MaDH=txtMaDH_CTHD.getText();
-        MaMH=txtMaMH.getText();
-        SL=txtSL.getText();
-        DGBan=txtGiaBan.getText();
-        TT=txtThanhTien.getText();
-         String cautruyvan = "INSERT into CTHOADON(MADH,MAMH,SL,DGBAN,THANHTIEN) Values('" + MaDH + "','" + MaMH + "','" + SL + "','" + DGBan + "','" + TT + "')";
-        
+        String MaDH, MaMH, SL, DGBan, TT;
+        MaDH = txtMaDH_CTHD.getText();
+        MaMH = txtMaMH.getText();
+        SL = txtSL.getText();
+        DGBan = txtGiaBan.getText();
+        TT = txtThanhTien.getText();
+        String cautruyvan = "INSERT into CTHOADON(MADH,MAMH,SL,DGBAN,THANHTIEN) Values('" + MaDH + "','" + MaMH + "','" + SL + "','" + DGBan + "','" + TT + "')";
+
         boolean kiemtra = KiemTraNhapHoaDon(0);
         if (kiemtra) {
-            Main.connection.ExcuteQueryUpdateDB(cautruyvan);
+            this.getConnection().ExcuteQueryUpdateDB(cautruyvan);
             Main.frmTC.infoBox("Thêm Thành Công !!!", "Thông báo");
             System.out.println("Đã Thêm Thành Công");
             System.out.println(cautruyvan);
         } else {
             System.out.println("Thất Bại");
         }
-         LayDuLieuChiTietHoaDon(MaDH);
-    }//GEN-LAST:event_btnThemCTHDActionPerformed
+        LayDuLieuChiTietHoaDon(MaDH);
+    }                                           
 
-    private void btnSuaCTHDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaCTHDActionPerformed
+    private void btnSuaCTHDActionPerformed(java.awt.event.ActionEvent evt) {                                           
         // TODO add your handling code here:
-         String MaDH ,MaMH,SL,DGBan,TT;
-       MaDH=txtMaDH_CTHD.getText();
-        MaMH=txtMaMH.getText();
-        SL=txtSL.getText();
-        DGBan=txtGiaBan.getText();
-        TT=txtThanhTien.getText();
-         String cautruyvan = " update  CTHOADON SET MAMH='" + MaMH + "',SL='" + SL + "',DGBAN='" + DGBan + "',THANHTIEN='" + TT + "' WHERE MADH='"+MaDH+"'";
-        
+        String MaDH, MaMH, SL, DGBan, TT;
+        MaDH = txtMaDH_CTHD.getText();
+        MaMH = txtMaMH.getText();
+        SL = txtSL.getText();
+        DGBan = txtGiaBan.getText();
+        TT = txtThanhTien.getText();
+        String cautruyvan = " update  CTHOADON SET MAMH='" + MaMH + "',SL='" + SL + "',DGBAN='" + DGBan + "',THANHTIEN='" + TT + "' WHERE MADH='" + MaDH + "'";
+
         boolean kiemtra = KiemTraNhapHoaDon(0);
         if (kiemtra) {
-            Main.connection.ExcuteQueryUpdateDB(cautruyvan);
+            this.getConnection().ExcuteQueryUpdateDB(cautruyvan);
             Main.frmTC.infoBox(" Sửa Thành Công !!!", "Thông báo");
             System.out.println("Đã sửa Thành Công");
             System.out.println(cautruyvan);
         } else {
             System.out.println("Thất Bại");
         }
-         LayDuLieuChiTietHoaDon(MaDH);
-    }//GEN-LAST:event_btnSuaCTHDActionPerformed
+        LayDuLieuChiTietHoaDon(MaDH);
+    }                                          
 
-    private void btnXoaCTHDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaCTHDActionPerformed
+    private void btnXoaCTHDActionPerformed(java.awt.event.ActionEvent evt) {                                           
         // TODO add your handling code here:
-         String MaDH=txtMaDH.getText();
-         String cautruyvan = "delete CTHOADON where MADH='" + MaDH+"';";
-         Main.frmTC.infoBox("Lỗi xóa chi tiết hoán đơn !!!", "Thông báo");
+        String MaDH = txtMaDH.getText();
+        String cautruyvan = "delete CTHOADON where MADH='" + MaDH + "';";
+        Main.frmTC.infoBox("Lỗi xóa chi tiết hoán đơn !!!", "Thông báo");
         boolean kiemtra = KiemTraNhapHoaDon(0);
         if (kiemtra) {
-            Main.connection.ExcuteQueryUpdateDB(cautruyvan);
+            this.getConnection().ExcuteQueryUpdateDB(cautruyvan);
             Main.frmTC.infoBox("Xóa Thành Công !!!", "Thông báo");
             System.out.println("Đã xóa Thành Công");
             System.out.println(cautruyvan);
         } else {
             System.out.println("Thất Bại");
         }
-         LayDuLieuChiTietHoaDon(MaDH);
-    }//GEN-LAST:event_btnXoaCTHDActionPerformed
+        LayDuLieuChiTietHoaDon(MaDH);
+    }                                          
 
-    private void btnResetCTHDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetCTHDActionPerformed
+    private void btnResetCTHDActionPerformed(java.awt.event.ActionEvent evt) {                                             
         // TODO add your handling code here:
-         txtMaDH_CTHD.setText("" );
+        txtMaDH_CTHD.setText("");
         txtMaMH.setText("");
         txtSL.setText("");
         txtGiaBan.setText("");
         txtThanhTien.setText("");
         LayDuLieuHoaDon();
-    }//GEN-LAST:event_btnResetCTHDActionPerformed
+    }                                            
 
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // Variables declaration - do not modify                     
     private javax.swing.JRadioButton RadMaKH;
     private javax.swing.JRadioButton RadMaNV;
     private javax.swing.JButton btnResetCTHD;
@@ -900,5 +901,5 @@ public boolean KiemTraNhapChiTietHoaDon(int ts) {
     private javax.swing.JTextField txtThanhTien;
     private javax.swing.JTextField txtTimHD;
     private javax.swing.JTextField txtTriGia;
-    // End of variables declaration//GEN-END:variables
+    // End of variables declaration                   
 }
