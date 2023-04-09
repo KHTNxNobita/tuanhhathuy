@@ -22,14 +22,22 @@ import net.sf.jasperreports.view.JasperViewer;
  */
 public class ThongKeJPanel extends javax.swing.JPanel {
 
-    public clsConnectDB con;
+    private clsConnectDB connection;
+
+    public clsConnectDB getConnection() {
+        if (this.connection == null) {
+            this.connection = new clsConnectDB();
+        }
+
+        return this.connection;
+    }
 
     /**
      * Creates new form ThongKeJPanel
      */
     public ThongKeJPanel() {
         initComponents();
-        this.con = new clsConnectDB();
+        this.connection = new clsConnectDB();
     }
 
     /**
@@ -89,47 +97,46 @@ public class ThongKeJPanel extends javax.swing.JPanel {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(329, 329, 329)
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(55, 55, 55)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 630, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 141, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnReportKhachHang, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
-                    .addComponent(btnReport1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnNCC, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(21, 21, 21))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(329, 329, 329)
+                                .addComponent(jLabel1)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(55, 55, 55)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel2)
+                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 630, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 141, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(btnReportKhachHang, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
+                                        .addComponent(btnReport1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btnNCC, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(21, 21, 21))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addComponent(jLabel1)
-                .addGap(87, 87, 87)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnReportKhachHang, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addGap(42, 42, 42)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnReport1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addGap(36, 36, 36)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(btnNCC, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(183, Short.MAX_VALUE))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(37, 37, 37)
+                                .addComponent(jLabel1)
+                                .addGap(87, 87, 87)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(btnReportKhachHang, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel2))
+                                .addGap(42, 42, 42)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(btnReport1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel3))
+                                .addGap(36, 36, 36)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel5)
+                                        .addComponent(btnNCC, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addContainerGap(183, Short.MAX_VALUE))
         );
     }// </editor-fold>                        
 
-
-    private void btnReportKhachHangActionPerformed(java.awt.event.ActionEvent evt) {                                                   
+    private void btnReportKhachHangActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
 
         try {
@@ -137,7 +144,7 @@ public class ThongKeJPanel extends javax.swing.JPanel {
 //String reportName = "src/Report/ReportKhachHang.jrxml";
             JasperDesign jd = JRXmlLoader.load("D:\\hoctap\\JAVA\\QuanLyBanHang\\src\\Report\\reportKhachHang.jrxml");
             JasperReport jr = JasperCompileManager.compileReport("src/Report/reportKhachHang.jrxml");
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jr, map, this.con.getConnection());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jr, map, this.getConnection().getConnection());
 //JasperExportManager.exportReportToHtmlFile(jasperPrint, ".html");
 
             JasperViewer.viewReport(jasperPrint, false);
@@ -146,17 +153,16 @@ public class ThongKeJPanel extends javax.swing.JPanel {
             System.out.println(ex.getMessage());
         }
 
+    }
 
-    }                                                  
-
-    private void btnReport1ActionPerformed(java.awt.event.ActionEvent evt) {                                           
+    private void btnReport1ActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         try {
             HashMap map = new HashMap();
 //String reportName = "src/Report/ReportKhachHang.jrxml";
             JasperDesign jd = JRXmlLoader.load("D:\\hoctap\\JAVA\\QuanLyBanHang\\src\\Report\\reportNhanVien.jrxml");
             JasperReport jr = JasperCompileManager.compileReport("src/Report/reportNhanVien.jrxml");
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jr, map, this.con.getConnection());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jr, map, this.getConnection().getConnection());
 //JasperExportManager.exportReportToHtmlFile(jasperPrint, ".html");
 
             JasperViewer.viewReport(jasperPrint, false);
@@ -164,16 +170,16 @@ public class ThongKeJPanel extends javax.swing.JPanel {
         } catch (JRException ex) {
             System.out.println(ex.getMessage());
         }
-    }                                          
+    }
 
-    private void btnNCCActionPerformed(java.awt.event.ActionEvent evt) {                                       
+    private void btnNCCActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         try {
             HashMap map = new HashMap();
 //String reportName = "src/Report/ReportKhachHang.jrxml";
             JasperDesign jd = JRXmlLoader.load("D:\\hoctap\\JAVA\\QuanLyBanHang\\src\\Report\\reportNhaCungCap.jrxml");
             JasperReport jr = JasperCompileManager.compileReport("src/Report/reportNhaCungCap.jrxml");
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jr, map, this.con.getConnection());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jr, map, this.getConnection().getConnection());
 //JasperExportManager.exportReportToHtmlFile(jasperPrint, ".html");
 
             JasperViewer.viewReport(jasperPrint, false);
@@ -181,8 +187,7 @@ public class ThongKeJPanel extends javax.swing.JPanel {
         } catch (JRException ex) {
             System.out.println(ex.getMessage());
         }
-    }                                      
-
+    }
 
     // Variables declaration - do not modify                     
     private javax.swing.JButton btnNCC;
